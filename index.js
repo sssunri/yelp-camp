@@ -1,10 +1,15 @@
-// import express
+// import express and path
 const express = require("express");
 const app = express();
+const path = require("path");
+
+// set view engine to ejs
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
 // define root route
 app.get("/", (req, res) => {
-  res.send("hello from yelp camp!");
+  res.render("index");
 });
 
 // start server on port 3000
