@@ -1,0 +1,24 @@
+{
+  "name": "yelp-camp",
+  "version": "1.0.0",
+  "description": "a campgrounds review site",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "campgrounds",
+    "reviews"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sssunri/yelp-camp.git"
+  },
+  "author": "CHIN CHIN LIM",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "mongoose": "^8.4.5"
+  }
+}
