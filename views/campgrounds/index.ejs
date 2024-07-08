@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campgrounds</title>
+  </head>
+  <body>
+    <h1>Welcome to Campgrounds</h1>
+    <!-- display each campground's title -->
+    <ul>
+      <%for (let c of campgrounds) {%>
+      <li><%= c.title %></li>
+      <% }%>
+    </ul>
+  </body>
+</html>

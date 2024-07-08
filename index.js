@@ -25,14 +25,10 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-// define route to create and save a campground
-app.get("/make-campground", async (req, res) => {
-  const camp = new Campground({
-    title: "Backyard",
-    description: "cheap camping",
-  });
-  await camp.save();
-  res.send(camp);
+// define campgrounds route
+app.get("/campgrounds", async (req, res) => {
+  const campgrounds = await Campground.find({});
+  res.render("campgrounds/index", { campgrounds });
 });
 
 // start server on port 3000
