@@ -31,6 +31,12 @@ app.get("/campgrounds", async (req, res) => {
   res.render("campgrounds/index", { campgrounds });
 });
 
+// define show route for displaying campground details
+app.get("/campgrounds/:id", async (req, res) => {
+  const campgrounds = await Campground.findById(req.params.id);
+  res.render("campgrounds/show", { campgrounds });
+});
+
 // start server on port 3000
 app.listen(3000, () => {
   console.log("serving from port 3000");

@@ -7,10 +7,10 @@
   </head>
   <body>
     <h1>Welcome to Campgrounds</h1>
-    <!-- display each campground's title -->
+    <!-- iterate over campgrounds and list their titles with links to details -->
     <ul>
       <%for (let c of campgrounds) {%>
-      <li><%= c.title %></li>
+      <li><a href="/campgrounds/<%= c._id %>"> <%= c.title %> </a></li>
       <% }%>
     </ul>
   </body>
