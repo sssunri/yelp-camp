@@ -6,12 +6,20 @@
     <title>Campgrounds</title>
   </head>
   <body>
-    <h1>Welcome to Campgrounds</h1>
-    <!-- iterate over campgrounds and list their titles with links to details -->
-    <ul>
-      <%for (let c of campgrounds) {%>
-      <li><a href="/campgrounds/<%= c._id %>"> <%= c.title %> </a></li>
-      <% }%>
-    </ul>
+    <main>
+      <h1>Welcome to Campgrounds</h1>
+      <!-- link to add a new campground  -->
+      <div>
+        <a href="/campgrounds/new">Add Campground</a>
+      </div>
+      <!-- list campgrounds with links to their details -->
+      <section>
+        <ul>
+          <%for (let c of campgrounds) {%>
+          <li><a href="/campgrounds/<%= c._id %>"> <%= c.title %> </a></li>
+          <% }%>
+        </ul>
+      </section>
+    </main>
   </body>
 </html>
