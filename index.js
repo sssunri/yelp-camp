@@ -3,6 +3,8 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 
+const Campground = require("./models/campground");
+
 // connect to mongodb
 mongoose.connect("mongodb://localhost:27017/yelp-camp", {});
 
@@ -21,6 +23,16 @@ app.set("views", path.join(__dirname, "views"));
 // define root route
 app.get("/", (req, res) => {
   res.render("index");
+});
+
+// define route to create and save a campground
+app.get("/make-campground", async (req, res) => {
+  const camp = new Campground({
+    title: "Backyard",
+    description: "cheap camping",
+  });
+  await camp.save();
+  res.send(camp);
 });
 
 // start server on port 3000
