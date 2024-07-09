@@ -1,25 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Campgrounds</title>
-  </head>
-  <body>
-    <main>
-      <h1>Welcome to Campgrounds</h1>
-      <!-- link to add a new campground  -->
-      <div>
-        <a href="/campgrounds/new">Add Campground</a>
-      </div>
-      <!-- list campgrounds with links to their details -->
-      <section>
-        <ul>
-          <%for (let c of campgrounds) {%>
-          <li><a href="/campgrounds/<%= c._id %>"> <%= c.title %> </a></li>
-          <% }%>
-        </ul>
-      </section>
-    </main>
-  </body>
-</html>
+<% layout("layouts/boilerplate") %> <% title = "Campgrounds" %>
+<main>
+  <h1>Welcome to Campgrounds</h1>
+  <!-- link to add a new campground  -->
+  <div>
+    <a href="/campgrounds/new">Add Campground</a>
+  </div>
+  <!-- list campgrounds with links to their details -->
+  <section>
+    <ul>
+      <%for (let c of campgrounds) {%>
+      <li><a href="/campgrounds/<%= c._id %>"> <%= c.title %> </a></li>
+      <% }%>
+    </ul>
+  </section>
+</main>
