@@ -7,10 +7,13 @@
   </head>
   <body>
     <main>
-      <h1><%= campgrounds.title %></h1>
-      <h2><%= campgrounds.location %></h2>
+      <h1><%= campground.title %></h1>
+      <h2><%= campground.location %></h2>
     </main>
     <!-- link to view campgrounds -->
+    <div>
+      <a href="/campgrounds/<%= campground._id %>/edit">Edit</a>
+    </div>
     <footer>
       <a href="/campgrounds">View Campgrounds</a>
     </footer>
