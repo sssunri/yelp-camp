@@ -25,5 +25,32 @@
       integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
       crossorigin="anonymous"
     ></script>
+
+    <!-- client-side form validation -->
+    <script>
+      (function () {
+        "use strict";
+
+        // fetch all forms we want to apply custom validation to
+        const forms = document.querySelectorAll(".needs-validation");
+
+        // loop over them and prevent submission if invalid
+        Array.from(forms).forEach(function (form) {
+          form.addEventListener(
+            "submit",
+            function (event) {
+              if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+
+              // add validation feedback
+              form.classList.add("was-validated");
+            },
+            false
+          );
+        });
+      })();
+    </script>
   </body>
 </html>
