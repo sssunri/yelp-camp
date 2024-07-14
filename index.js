@@ -2,9 +2,10 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
-const ejsMate = require('ejs-mate');
+const ejsMate = require("ejs-mate");
 
 const Campground = require("./models/campground");
+const handleAsync = require("./utilities/handleAsync");
 
 // connect to mongodb
 mongoose.connect("mongodb://localhost:27017/yelp-camp", {});
@@ -17,12 +18,13 @@ db.once("open", () => {
 
 const app = express();
 
-app.engine('ejs', ejsMate);
+app.engine("ejs", ejsMate);
 
 // set view engine to ejs
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+// middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
@@ -32,10 +34,13 @@ app.get("/", (req, res) => {
 });
 
 // define campgrounds route
-app.get("/campgrounds", async (req, res) => {
-  const campgrounds = await Campground.find({});
-  res.render("campgrounds/index", { campgrounds });
-});
+app.get(
+  "/campgrounds",
+  handleAsync(async (req, res) => {
+    const campgrounds = await Campground.find({});
+    res.render("campgrounds/index", { campgrounds });
+  })
+);
 
 // form for creating new campground
 app.get("/campgrounds/new", (req, res) => {
@@ -43,38 +48,63 @@ app.get("/campgrounds/new", (req, res) => {
 });
 
 // handle new campground submission
-app.post("/campgrounds", async (req, res) => {
-  const campground = new Campground(req.body.campground);
-  await campground.save();
-  res.redirect(`/campgrounds/${campground._id}`);
-});
+app.post(
+  "/campgrounds",
+  handleAsync(async (req, res, next) => {
+    const campground = new Campground(req.body.campground);
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+  })
+);
 
 // define show route for displaying campground details
-app.get("/campgrounds/:id", async (req, res) => {
-  const campground = await Campground.findById(req.params.id);
-  res.render("campgrounds/show", { campground });
-});
+app.get(
+  "/campgrounds/:id",
+  handleAsync(async (req, res) => {
+    const campground = await Campground.findById(req.params.id);
+    res.render("campgrounds/show", { campground });
+  })
+);
 
 // form for editing a campground
-app.get("/campgrounds/:id/edit", async (req, res) => {
-  const campground = await Campground.findById(req.params.id);
-  res.render("campgrounds/edit", { campground });
-});
+app.get(
+  "/campgrounds/:id/edit",
+  handleAsync(async (req, res) => {
+    const campground = await Campground.findById(req.params.id);
+    res.render("campgrounds/edit", { campground });
+  })
+);
 
 // handle campground edit submission
-app.put("/campgrounds/:id", async (req, res) => {
-  const { id } = req.params;
-  const campground = await Campground.findByIdAndUpdate(id, {
-    ...req.body.campground,
-  });
-  res.redirect(`/campgrounds/${campground._id}`);
-});
+app.put(
+  "/campgrounds/:id",
+  handleAsync(async (req, res) => {
+    const { id } = req.params;
+    const campground = await Campground.findByIdAndUpdate(id, {
+      ...req.body.campground,
+    });
+    res.redirect(`/campgrounds/${campground._id}`);
+  })
+);
 
 // route to handle deletion of a campground
-app.delete("/campgrounds/:id", async (req, res) => {
-  const { id } = req.params;
-  await Campground.findByIdAndDelete(id);
-  res.redirect("/campgrounds");
+app.delete(
+  "/campgrounds/:id",
+  handleAsync(async (req, res) => {
+    const { id } = req.params;
+    await Campground.findByIdAndDelete(id);
+    res.redirect("/campgrounds");
+  })
+);
+
+// catch-all route for undefined routes
+app.all("*", (req, res, next) => {
+  res.send("error 404: not found");
+});
+
+// error handling middleware
+app.use((err, req, res, next) => {
+  res.send("error 404: not found");
 });
 
 // start server on port 3000
