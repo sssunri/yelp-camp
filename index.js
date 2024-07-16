@@ -3,10 +3,10 @@ const path = require("path");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-const joi = require("joi");
 
 const Campground = require("./models/campground");
 const Review = require("./models/review");
+const { campgroundSchema } = require("./schemas");
 
 const handleAsync = require("./utilities/handleAsync");
 const ExpressError = require("./utilities/ExpressError");
@@ -32,6 +32,16 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
+const validateCampground = (req, res, next) => {
+  const { error } = campgroundSchema.validate(req.body);
+  if (error) {
+    const message = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(message, 400);
+  } else {
+    next();
+  }
+};
+
 // define root route
 app.get("/", (req, res) => {
   res.render("index");
@@ -54,27 +64,10 @@ app.get("/campgrounds/new", (req, res) => {
 // handle new campground submission
 app.post(
   "/campgrounds",
+  validateCampground,
   handleAsync(async (req, res, next) => {
     // if (!req.body.campground)
     //   throw new ExpressError("Invalid Campground Data", 400);
-    const campgroundSchema = joi.object({
-      campground: joi
-        .object({
-          title: joi.string().required(),
-          image: joi.string().required(),
-          price: joi.number().min(0).required(),
-          description: joi.string().required(),
-          location: joi.string().required(),
-        })
-        .required(),
-    });
-
-    const { error } = campgroundSchema.validate(req.body);
-    if (error) {
-      const message = error.details.map((el) => el.message).join(",");
-      throw new ExpressError(message, 400);
-    }
-
     const campground = new Campground(req.body.campground);
     await campground.save();
     res.redirect(`/campgrounds/${campground._id}`);
@@ -102,6 +95,7 @@ app.get(
 // handle campground edit submission
 app.put(
   "/campgrounds/:id",
+  validateCampground,
   handleAsync(async (req, res) => {
     const { id } = req.params;
     const campground = await Campground.findByIdAndUpdate(id, {
