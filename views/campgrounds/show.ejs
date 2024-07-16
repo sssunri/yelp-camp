@@ -31,14 +31,22 @@
       </div>
       <!-- form for leaving a review -->
       <h2>Leave a Review</h2>
-      <form action="/campgrounds/<%= campground._id %>/reviews" method="post">
+      <form
+        action="/campgrounds/<%= campground._id %>/reviews"
+        method="post"
+        class="needs-validation"
+        novalidate
+      >
         <div class="mb-3">
           <label for="body" class="form-label">Review</label>
           <textarea
             name="review[body]"
             id="body"
             class="form-control"
+            required
           ></textarea>
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please provide a valid review.</div>
         </div>
         <div class="mb-3">
           <label for="rating" class="form-label">Rating</label>
